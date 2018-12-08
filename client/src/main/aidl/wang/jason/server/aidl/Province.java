@@ -3,13 +3,14 @@ package wang.jason.server.aidl;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * @author wj
  * @Date: 2018/12/3
  * @Description:
  **/
-public class Province implements Parcelable {
+public class Province implements Parcelable,Comparable<Province> {
     private String mName;
     private int mCode;
 
@@ -41,9 +42,19 @@ public class Province implements Parcelable {
     }
 
     public void readFromParcel(Parcel source){
-
+        mName = source.readString();
+        mCode = source.readInt();
     }
 
+    @Override
+    public int compareTo(@NonNull Province o) {
+        if(this.getCode() == o.getCode()
+                &&this.getName().equals(o.getName())) {
+            return 0;
+        }else{
+            return 1;
+        }
+    }
 
     public int getCode() {
         return mCode;

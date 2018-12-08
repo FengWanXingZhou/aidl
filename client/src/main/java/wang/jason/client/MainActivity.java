@@ -11,6 +11,10 @@ import wang.jason.server.aidl.Country;
 import wang.jason.server.aidl.INationInterface;
 import wang.jason.server.aidl.Province;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG ="aidl";
@@ -33,14 +37,42 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Country country = nationInterface.getCountry();
 
-                Province province = nationInterface.getProvince(1);
-                Log.i(TAG,"client province code = "+province.getCode()+" name:"+province.getName());
-                boolean provinceExistIn =  nationInterface.isProvinceExistIn(province);
-                Log.i(TAG,"client provinceExistIn = "+provinceExistIn);
-                boolean provinceExistOut =  nationInterface.isProvinceExistOut(province);
-                Log.i(TAG,"client provinceExistOut = "+provinceExistOut+" code:"+province.getCode()+" name:"+ province.getName());
-                boolean provinceExistInout =  nationInterface.isProvinceExistInOut(province);
-                Log.i(TAG,"client provinceExistInout = "+provinceExistInout);
+                List<Province> provinces = nationInterface.getProvinceList();
+                if(provinces != null) {
+                    Log.i(TAG, "list size = " +provinces.size());
+                    for(Province province:provinces){
+                        if(province!=null){
+                            Log.i(TAG,"list province code = "+province.getCode()+" name="+province.getName());
+                        }
+                    }
+                }
+
+                Map map = nationInterface.getProvinceMap();
+
+                if(map instanceof HashMap) {
+                    HashMap<Integer, Province> provinceHashMap = (HashMap<Integer, Province>) map;
+                    if(provinceHashMap!=null){
+                        Log.i(TAG, "map size = " +provinceHashMap.size());
+
+                    }
+                }
+                Province province = nationInterface.getProvince();
+                if(province!=null){
+                    Log.i(TAG,"client province code = "+province.getCode()+" name="+province.getName());
+                    Log.i(TAG,"client province code = "+province.getCode()+" name:"+province.getName());
+                    boolean provinceExistIn =  nationInterface.isProvinceExistIn(province);
+                    Log.i(TAG,"client provinceExistIn = "+provinceExistIn);
+                    Province provinceOut = new Province();
+                    boolean provinceExistOut =  nationInterface.isProvinceExistOut(provinceOut);
+                    Log.i(TAG,"client provinceExistOut = "+provinceExistOut+" code:"+provinceOut.getCode()+" name:"+ provinceOut.getName());
+
+
+                    boolean provinceExistInout =  nationInterface.isProvinceExistInOut(province);
+                    Log.i(TAG,"client provinceExistInout = "+provinceExistInout);
+                }
+
+
+
 
             }catch (Exception e){
                 e.printStackTrace();

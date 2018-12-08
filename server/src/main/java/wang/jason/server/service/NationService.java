@@ -12,7 +12,9 @@ import wang.jason.server.aidl.INationInterface;
 import wang.jason.server.aidl.Province;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NationService extends Service {
     private static final String TAG ="aidl";
@@ -20,19 +22,27 @@ public class NationService extends Service {
     private RemoteCallbackList<CountryCallback> mCountryCallbckList = new RemoteCallbackList<>();
     static{
         List<Province>  provinces = new ArrayList<>(3);
+        HashMap<Integer,Province> provinceHashMap = new HashMap<>();
         Province province = new Province();
         province.setCode(0);
         province.setName("beijing");
         provinces.add(province);
+        provinceHashMap.put(0,province);
         province = new Province();
         province.setCode(1);
         province.setName("shanghai");
         provinces.add(province);
+        provinceHashMap.put(1,province);
         province = new Province();
         province.setCode(2);
         province.setName("chongqing");
         provinces.add(province);
+        provinceHashMap.put(2,province);
         mCountry.setProvinceList(provinces);
+        mCountry.setProvinceMap(provinceHashMap);
+        mCountry.setProvince(province);
+
+
     }
     public NationService() {
 
@@ -65,15 +75,19 @@ public class NationService extends Service {
         }
 
         @Override
-        public Province getProvince(int code) throws RemoteException {
-            if(mCountry.getProvinceList()!=null&&mCountry.getProvinceList().size()>0){
-                for(Province province:mCountry.getProvinceList()){
-                    if(province.getCode() == code){
-                        return province;
-                    }
-                }
-            }
-            return null;
+        public List<Province> getProvinceList() throws RemoteException {
+            return mCountry.getProvinceList();
+        }
+
+        @Override
+        public Map getProvinceMap() throws RemoteException {
+            return mCountry.getProvinceMap();
+        }
+
+        @Override
+        public Province getProvince() throws RemoteException {
+
+            return mCountry.getProvince();
         }
 
 
@@ -86,14 +100,9 @@ public class NationService extends Service {
         public boolean isProvinceExistIn(Province province) throws RemoteException {
             Log.i(TAG,"server isProvinceExistIn province:"+province
                     +" code:"+province.getCode()+" name:"+province.getName());
-            if(mCountry.getProvinceList()!=null&&mCountry.getProvinceList().size()>0
-                    &&province !=null){
-                for(Province provinceCache:mCountry.getProvinceList()){
-                    if(provinceCache.getCode() == province.getCode()
-                            &&provinceCache.getName().equals(province.getName())){
-                        return true;
-                    }
-                }
+            if(mCountry.getProvince()!=null
+                    &&mCountry.getProvince().compareTo(province) == 0){
+                return true;
             }
             return false;
         }
@@ -102,16 +111,11 @@ public class NationService extends Service {
         public boolean isProvinceExistOut(Province province) throws RemoteException {
             Log.i(TAG,"server isProvinceExistOut province:"+province+" code:"+province.getCode()+" name:"+province.getName());
 
-
-            if(mCountry.getProvinceList()!=null&&mCountry.getProvinceList().size()>0
-                    &&province !=null){
-                for(Province provinceCache:mCountry.getProvinceList()){
-                    if(provinceCache.getCode() == province.getCode()
-                            &&provinceCache.getName().equals(province.getName())){
-                        return true;
-                    }
-                }
+            if(mCountry.getProvince()!=null
+                    &&mCountry.getProvince().compareTo(province) == 0){
+                return true;
             }
+
             province.setCode(4);
             province.setName("chengdu");
             return false;
@@ -120,14 +124,9 @@ public class NationService extends Service {
         @Override
         public boolean isProvinceExistInOut(Province province) throws RemoteException {
             Log.i(TAG,"server isProvinceExistInOut province:"+province+" code:"+province.getCode()+" name:"+province.getName());
-            if(mCountry.getProvinceList()!=null&&mCountry.getProvinceList().size()>0
-                    &&province !=null){
-                for(Province provinceCache:mCountry.getProvinceList()){
-                    if(provinceCache.getCode() == province.getCode()
-                            &&provinceCache.getName().equals(province.getName())){
-                        return true;
-                    }
-                }
+            if(mCountry.getProvince()!=null
+                    &&mCountry.getProvince().compareTo(province) == 0){
+                return true;
             }
             return false;
         }

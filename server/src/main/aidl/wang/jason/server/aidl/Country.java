@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,7 +15,8 @@ import java.util.List;
 public class Country implements Parcelable {
 
     private List<Province> mProvinceList;
-
+    private HashMap<Integer,Province> mProvinceMap;
+    private Province mProvince;
 
     @Override
     public int describeContents() {
@@ -24,17 +26,23 @@ public class Country implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeList(mProvinceList);
-
+        dest.writeMap(mProvinceMap);
+        dest.writeParcelable(mProvince,0);
     }
 
-    public static final Parcelable.Creator<Country> CREATOR = new Parcelable.Creator<Country>(){
+    public static final Creator<Country> CREATOR = new Creator<Country>(){
 
         @Override
         public Country createFromParcel(Parcel source) {
             Country country = new Country();
             List<Province> provinceList = new ArrayList<>();
+            HashMap<Integer,Province> provinceHashMap = new HashMap<>();
             source.readList(provinceList,getClass().getClassLoader());
+            source.readMap(provinceHashMap,getClass().getClassLoader());
+
             country.setProvinceList(provinceList);
+            country.setProvinceMap(provinceHashMap);
+            country.setProvince((Province)source.readParcelable(getClass().getClassLoader()));
             //country.setProvinceList(source.readArrayList(Thread.currentThread().getContextClassLoader()));
 
             return country;
@@ -53,5 +61,21 @@ public class Country implements Parcelable {
 
     public void setProvinceList(List<Province> mProvinceList) {
         this.mProvinceList = mProvinceList;
+    }
+
+    public HashMap<Integer, Province> getProvinceMap() {
+        return mProvinceMap;
+    }
+
+    public void setProvinceMap(HashMap<Integer, Province> mProvinceMap) {
+        this.mProvinceMap = mProvinceMap;
+    }
+
+    public Province getProvince() {
+        return mProvince;
+    }
+
+    public void setProvince(Province mProvince) {
+        this.mProvince = mProvince;
     }
 }

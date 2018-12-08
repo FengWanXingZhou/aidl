@@ -12,7 +12,13 @@ interface INationInterface {
 
     int getCountrySize();
 
-    Province getProvince(int code);
+    List<Province> getProvinceList();
+
+    Map getProvinceMap();
+
+    Province getProvince();
+
+
 
     boolean isProvinceExistIn(in Province province);
 
