@@ -40,7 +40,10 @@ public class Province implements Parcelable,Comparable<Province> {
         dest.writeString(mName);
         dest.writeInt(mCode);
     }
-
+    /**
+     * 当传递数据时使用`out`和`inout`tag时，还必须手动加上`readFromParcel`方法，
+     * 这是因为当采用这两个数据流向标记时，`aidl`被调用`readFromParcel`方法从`Parcel`中反序列化
+     */
     public void readFromParcel(Parcel source){
         mName = source.readString();
         mCode = source.readInt();

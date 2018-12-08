@@ -1,4 +1,4 @@
-// IMyAidlInterface.aidl
+// INationAidlInterface.aidl
 package wang.jason.server.aidl;
 
 // Declare any non-default types here with import statements
@@ -32,14 +32,25 @@ interface INationInterface {
     Map getProvinceMap();
 
     Province getProvince();
-
+    /**
+    * 传递数据时采用in，表示数据从客户端单向流动到服务端
+    * */
     boolean isProvinceExistIn(in Province province);
-
+    /**
+    * 传递数据时采用out，表示数据从服务端单向流动到客户端
+    * */
     boolean isProvinceExistOut(out Province province);
-
+    /**
+    * 传递数据时采用inout，表示数据在客户端和服务端间双向流通
+    * */
     boolean isProvinceExistInOut(inout Province province);
 
+    /**
+    *注册回调，这里通过aidl实现回调
+    **/
     void registerCallback(in CountryCallback callback);
-
+    /**
+    * 取消注册回调
+    * */
     void unRegisterCallback(in CountryCallback callback);
 }

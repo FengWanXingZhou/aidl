@@ -14,6 +14,11 @@ import java.util.List;
  **/
 public class Country implements Parcelable {
 
+
+    /**
+     * `Country`的成员变量包含`List`,`HashMap`和普通的类，要序列化，只需调用`Parcel`的`writeList`,`writeMap`,`writeParcelable`
+     * 如果成员变量是`int`,` long`等，只需调用`Parcel`的`writeInt`,`writeLong`
+     * */
     private List<Province> mProvinceList;
     private HashMap<Integer,Province> mProvinceMap;
     private Province mProvince;
